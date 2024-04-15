@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.Collections;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -33,7 +34,7 @@ public class ImageLoader {
         executorService = Executors.newFixedThreadPool(5);
     }
 
-    int stub_id = R.mipmap.ic_launcher;
+    int stub_id = R.drawable.loading;
 
     public void DisplayImage(String url, int loader, ImageView imageView) {
         stub_id = loader;
@@ -69,7 +70,12 @@ public class ImageLoader {
             conn.setReadTimeout(30000);
             conn.setInstanceFollowRedirects(true);
             InputStream is = conn.getInputStream();
-            OutputStream os = new FileOutputStream(f);
+            OutputStream os = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                os = Files.newOutputStream(f.toPath());
+            }else {
+                os = new FileOutputStream(f);
+            }
             Utils.CopyStream(is, os);
             os.close();
             bitmap = decodeFile(f);
@@ -89,7 +95,8 @@ public class ImageLoader {
             BitmapFactory.decodeStream(new FileInputStream(f), null, o);
 
             //Find the correct scale value. It should be the power of 2.
-            final int REQUIRED_SIZE = 70;
+            final int REQUIRED_SIZE = 200;
+//            final int REQUIRED_SIZE = 70;
             int width_tmp = o.outWidth, height_tmp = o.outHeight;
             int scale = 1;
             while (true) {

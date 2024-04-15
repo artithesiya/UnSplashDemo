@@ -1,65 +1,56 @@
-package com.example.unsplashdemo.adapter;
+package com.example.unsplashdemo.adapter
 
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
+import android.content.Context
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.BaseAdapter
+import android.widget.ImageView
+import com.example.unsplashdemo.ImageLoader
+import com.example.unsplashdemo.R
+import com.example.unsplashdemo.model.UnsplashPhoto
+import com.squareup.picasso.Picasso
 
-import com.example.unsplashdemo.ImageLoader;
-import com.example.unsplashdemo.R;
-import com.example.unsplashdemo.model.UnsplashPhoto;
-import com.squareup.picasso.Picasso;
-
-import java.util.List;
-
-public class PhotoAdapter extends BaseAdapter {
-    private List<UnsplashPhoto> photos;
-    private Context context;
-
-    public PhotoAdapter(Context context, List<UnsplashPhoto> photos) {
-        this.context = context;
-        this.photos = photos;
+class PhotoAdapter(private val context: Context, private val photos: List<UnsplashPhoto>) :
+    BaseAdapter() {
+    override fun getCount(): Int {
+        return photos.size
     }
 
-    @Override
-    public int getCount() {
-        return photos.size();
+    override fun getItem(position: Int): UnsplashPhoto {
+        return photos[position]
     }
 
-    @Override
-    public Object getItem(int position) {
-        return photos.get(position);
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
     }
 
-    @Override
-    public long getItemId(int position) {
-        return position;
+    private class ViewHolder {
+        lateinit var ivPhoto: ImageView
     }
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View listitemView = convertView;
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        var listitemView = convertView
+        val holder: ViewHolder
         if (listitemView == null) {
             // Layout Inflater inflates each item to be displayed in GridView.
-            listitemView = LayoutInflater.from(this.context).inflate(R.layout.photos_item, parent, false);
-        }
-        ImageView imageView=listitemView.findViewById(R.id.ivPhoto);
-        ImageLoader imgLoader = new ImageLoader(this.context);
-        int loader = R.mipmap.ic_launcher;
+            listitemView = LayoutInflater.from(context).inflate(R.layout.photos_item, parent, false)
+            holder = ViewHolder()
+            holder.ivPhoto = listitemView.findViewById(R.id.ivPhoto)
+            listitemView.tag = holder
 
-//        ImageView imageView;
-//        if (convertView == null) {
-//            imageView = new ImageView(context);
-//            imageView.setLayoutParams(new GridView.LayoutParams(350, 350));
-//            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//        } else {
-//            imageView = (ImageView) convertView;
-//        }
-        UnsplashPhoto photo = photos.get(position);
-//        Picasso.get().load(photo.getUrls().getRegular()).into(imageView);
-        imgLoader.DisplayImage(photo.getUrls().getRegular(), loader, imageView);
-        return listitemView;
+        } else {
+            holder = listitemView.tag as ViewHolder
+        }
+//        val imageView = listitemView.findViewById<ImageView>(R.id.ivPhoto)
+        val imgLoader = ImageLoader(context)
+        val loader = R.drawable.loading
+        var photo = getItem(position)
+//        val (_, urls) = photos[position]
+        Log.w("msg", "pos-- " + position + "-getUrls-- " + photo.urls.regular);
+        imgLoader.DisplayImage(photo.urls.regular, loader, holder.ivPhoto)
+//        Picasso.get().load(photo.urls.regular).placeholder(loader).into(holder.ivPhoto)
+        return listitemView!!
     }
 }

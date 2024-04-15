@@ -10,30 +10,50 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/relLoading"
-        android:horizontalSpacing="5dp"
+        android:layout_margin="5dp"
+        android:horizontalSpacing="10dp"
         android:numColumns="3"
-        android:verticalSpacing="5dp" />
+        android:padding="10dp"
+        android:verticalSpacing="15dp"
+        android:visibility="visible" />
+
+    <RelativeLayout
+        android:id="@+id/relNoData"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/txtError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/no_data_found"
+            android:textColor="@color/black"
+            android:layout_margin="10dp"
+            android:textAlignment="center"
+            android:textSize="20sp" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/relLoading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_marginBottom="5dp"
         android:gravity="center"
-        android:visibility="gone"
-        android:layout_alignParentBottom="true">
+        android:visibility="gone">
 
         <ProgressBar
             android:id="@+id/progress_circular"
             android:layout_width="30dp"
-            android:layout_height="30dp"
-            />
+            android:layout_height="30dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/progress_circular"
             android:text="@string/loading" />
     </RelativeLayout>
