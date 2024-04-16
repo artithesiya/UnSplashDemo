@@ -3,4 +3,7 @@
     <string name="loading">Please wait, photos loading…</string>
     <string name="photo">photo</string>
     <string name="no_data_found">No Data Found!!!</string>
+    <string name="retry">Retry</string>
+    <string name="splash_logo">splash_logo</string>
+    <string name="unsplash_images">Unsplash Images</string>
 </resources>

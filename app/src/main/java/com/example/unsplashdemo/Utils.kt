@@ -1,23 +1,20 @@
-package com.example.unsplashdemo;
+package com.example.unsplashdemo
 
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.InputStream
+import java.io.OutputStream
 
-public class Utils {
-    public static void CopyStream(InputStream is, OutputStream os)
-    {
-        final int buffer_size=1024;
-        try
-        {
-            byte[] bytes=new byte[buffer_size];
-            for(;;)
-            {
-              int count=is.read(bytes, 0, buffer_size);
-              if(count==-1)
-                  break;
-              os.write(bytes, 0, count);
+object Utils {
+    fun copyStream(`is`: InputStream, os: OutputStream) {
+        val bufferSize = 1024
+        try {
+            val bytes = ByteArray(bufferSize)
+            while (true) {
+                val count = `is`.read(bytes, 0, bufferSize)
+                if (count == -1) break
+                os.write(bytes, 0, count)
             }
+        } catch (ex: Exception) {
+            ex.printStackTrace()
         }
-        catch(Exception ex){}
     }
 }

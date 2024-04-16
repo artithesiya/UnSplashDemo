@@ -7,13 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
+import android.widget.Toast
 import com.example.unsplashdemo.ImageLoader
 import com.example.unsplashdemo.R
 import com.example.unsplashdemo.model.UnsplashPhoto
-import com.squareup.picasso.Picasso
 
 class PhotoAdapter(private val context: Context, private val photos: List<UnsplashPhoto>) :
     BaseAdapter() {
+    private val imgLoader = ImageLoader(context)
+
     override fun getCount(): Int {
         return photos.size
     }
@@ -43,14 +45,13 @@ class PhotoAdapter(private val context: Context, private val photos: List<Unspla
         } else {
             holder = listitemView.tag as ViewHolder
         }
-//        val imageView = listitemView.findViewById<ImageView>(R.id.ivPhoto)
-        val imgLoader = ImageLoader(context)
         val loader = R.drawable.loading
-        var photo = getItem(position)
-//        val (_, urls) = photos[position]
+        val photo = getItem(position)
         Log.w("msg", "pos-- " + position + "-getUrls-- " + photo.urls.regular);
-        imgLoader.DisplayImage(photo.urls.regular, loader, holder.ivPhoto)
-//        Picasso.get().load(photo.urls.regular).placeholder(loader).into(holder.ivPhoto)
+        imgLoader.displayImage(photo.urls.regular, loader, holder.ivPhoto)
+        holder.ivPhoto.setOnClickListener {
+            Toast.makeText(this.context, "Image Clicked!!", Toast.LENGTH_SHORT).show()
+        }
         return listitemView!!
     }
 }

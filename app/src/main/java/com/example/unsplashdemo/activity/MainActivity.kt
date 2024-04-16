@@ -1,11 +1,14 @@
 package com.example.unsplashdemo.activity
 
+import android.content.Context
+import android.net.ConnectivityManager
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.view.View
 import android.widget.AbsListView
-import androidx.activity.ComponentActivity
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import com.example.unsplashdemo.FileCache
 import com.example.unsplashdemo.adapter.PhotoAdapter
 import com.example.unsplashdemo.databinding.ActivityMainBinding
@@ -17,16 +20,15 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
-import java.io.File
 import java.io.IOException
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
     private var isLoading: Boolean = false
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: PhotoAdapter
     private var photos: MutableList<UnsplashPhoto> = mutableListOf()
     private var page: Int = 1
-    private val perPage: Int = 20
+    private val perPage: Int = 15
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +38,34 @@ class MainActivity : ComponentActivity() {
         setAdapter()
         fetchPhotos()
         gridScrollLister()
+        setReTryClick()
+        handleBackPress()
+    }
+
+    private fun handleBackPress() {
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                finishAffinity()
+            }
+
+        }
+
+        // Add the callback to the OnBackPressedDispatcher
+        onBackPressedDispatcher.addCallback(this, callback)
+    }
+
+    private fun setReTryClick() {
+        binding.btnRetry.setOnClickListener {
+            if (isNetworkConnected(this@MainActivity)) {
+                fetchPhotos()
+            } else {
+                Toast.makeText(
+                    this@MainActivity,
+                    "No network found, please try again later..",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 
     private fun gridScrollLister() {
@@ -52,7 +82,7 @@ class MainActivity : ComponentActivity() {
                 if (firstVisibleItem + visibleItemCount >= totalItemCount && !isLoading) {
                     // Load more photos when reaching the end of the grid
                     binding.relLoading.visibility = View.VISIBLE
-                    fetchPhotos();
+                    fetchPhotos()
                 }
 
             }
@@ -76,28 +106,26 @@ class MainActivity : ComponentActivity() {
                 "isFirstTime",
                 true
             )
-
         } else {
-            editor.putBoolean("isFirstTime", false);
+            editor.putBoolean("isFirstTime", false)
         }
-//        var fileCache = FileCache(this@MainActivity)
-        val folder = File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-            "/TempImages"
-        )
-        Log.w("msg", "main_check-- " + folder.exists())
-        Log.w("msg", "main_check-- " + (folder.listFiles()?.size ?: 0))
-        if (folder.exists()) {
-            folder.deleteRecursively()
-        }
-
-//        fileCache.clear()
+        val fileCache = FileCache(this@MainActivity)
+        fileCache.clear()
         editor.apply()
     }
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
     private fun fetchPhotos() {
         isLoading = true
+        if (photos.size == 0) {
+            binding.progressBar.visibility = View.VISIBLE
+            if (binding.relLoading.visibility == View.VISIBLE) {
+                binding.relLoading.visibility = View.GONE
+            }
+            if (binding.relNoData.visibility == View.VISIBLE) {
+                binding.relNoData.visibility = View.GONE
+            }
+        }
         coroutineScope.launch {
             try {
                 val newPhotos = withContext(Dispatchers.IO) {
@@ -106,13 +134,16 @@ class MainActivity : ComponentActivity() {
                     )
                 }
                 photos.addAll(newPhotos)
+                adapter.notifyDataSetChanged()
+                page++
                 if (binding.relLoading.visibility == View.VISIBLE) {
                     binding.relLoading.visibility = View.GONE
                 }
                 binding.relNoData.visibility = View.GONE
                 binding.gridView.visibility = View.VISIBLE
-                adapter.notifyDataSetChanged()
-                page++
+                if (binding.progressBar.visibility == View.VISIBLE) {
+                    binding.progressBar.visibility = View.GONE
+                }
             } catch (e: IOException) {
                 Log.e("MainActivity", "IO exception while fetching photos: ${e.message}")
                 showError("Failed to fetch photos. Please try again.")
@@ -129,13 +160,25 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun showError(message: String) {
-        binding.relNoData.visibility = View.VISIBLE
-        binding.gridView.visibility = View.GONE
-        binding.txtError.text = message
+        if (photos.size == 0) {
+            binding.relNoData.visibility = View.VISIBLE
+            binding.gridView.visibility = View.GONE
+            binding.txtError.text = message
+        }
+        if (binding.progressBar.visibility == View.VISIBLE) {
+            binding.progressBar.visibility = View.GONE
+        }
+        binding.relLoading.visibility = View.GONE
     }
 
     override fun onDestroy() {
         coroutineScope.cancel()
         super.onDestroy()
     }
+
+    private fun isNetworkConnected(context: Context): Boolean {
+        return (context.getSystemService(CONNECTIVITY_SERVICE) as
+                ConnectivityManager).activeNetworkInfo != null
+    }
+
 }
