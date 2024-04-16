@@ -26,10 +26,22 @@
 </ol>
 
 <h2>Permissions</h2>
-<ul>
-<li><code>INTERNET</code>: Required for network communication</li>
-<li><code>WRITE_EXTERNAL_STORAGE</code> / <code>READ_EXTERNAL_STORAGE</code>: Required for caching images from disk</li>
-</ul>
+<li>Required for network communication</li>
+</br>
+<code>"android.permission.ACCESS_NETWORK_STATE"
+ "android.permission.INTERNET"
+</code>
+</br>
+<li>Required for caching images from disk</li>
+<h5>Devices running Android 12L (API level 32) or lower</h5><code>"android.permission.WRITE_EXTERNAL_STORAGE" 
+"android:name="android.permission.READ_EXTERNAL_STORAGE"</code>
+<h5>Devices running Android 13 (API level 33) or higher</h5>
+<code>"android:name="android.permission.READ_MEDIA_IMAGES"</code>
+<h5>To handle the reselection within the app on devices running Android 14
+or higher if your app targets Android 14 (API level 34) or higher.</h5>
+<code>"android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED"</code>
+
+  
 
 <h2>API Information</h2>
 <p><strong>BaseUrl:</strong> https://api.unsplash.com/</p>
