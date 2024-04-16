@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
     private fun handleBackPress() {
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                finishAffinity()
+                finish()
             }
 
         }
