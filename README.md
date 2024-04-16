@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1>Unsplash API Image Viewer</h1>
-<p>This Android app fetches images from the Unsplash API and displays them in a grid view. It includes pagination for loading more images and implements a caching mechanism for offline image handling, not used in third party for image loading.</p>
+<p>This Android app fetches images from the Unsplash API and displays them in a grid view. It includes pagination for loading more images and implements a caching mechanism for efficient retrieval, not used in third party for image loading.</p>
 
 <h2>Features</h2>
 <ul>
