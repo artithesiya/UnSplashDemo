@@ -18,6 +18,9 @@
 <li>Placeholder loader image</li>
 </ul>
 
+<h2>Preview Sample: </h2>
+<img src="https://github.com/artithesiya/UnSplashDemo/blob/master/app/src/main/assets/ss1.png" alt="SS1">
+
 <h2>Setup</h2>
 <ol>
 <li>Clone the repository: <code><a href="https://github.com/artithesiya/UnSplashDemo.git">git clone https://github.com/artithesiya/UnSplashDemo.git</a> </code></li>
