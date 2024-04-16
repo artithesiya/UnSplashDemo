@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">UnSplashDemo</string>
+    <string name="app_name">Arti_UnSplashImages</string>
     <string name="loading">Please wait, photos loading…</string>
     <string name="photo">photo</string>
     <string name="no_data_found">No Data Found!!!</string>

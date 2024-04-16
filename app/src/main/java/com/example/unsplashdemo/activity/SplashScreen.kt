@@ -75,25 +75,6 @@ class SplashScreen : AppCompatActivity() {
             // Access denied
             return false
         }
-        /*if (android.os.Build.VERSION.SDK_INT > 33) {
-            val result =
-                ContextCompat.checkSelfPermission(
-                    applicationContext,
-                    Manifest.permission.READ_MEDIA_IMAGES
-                )
-            return result == PackageManager.PERMISSION_GRANTED
-        } else {
-            val result =
-                ContextCompat.checkSelfPermission(
-                    applicationContext,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                )
-            val result1 = ContextCompat.checkSelfPermission(
-                applicationContext,
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            )
-            return result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED
-        }*/
     }
 
     private fun requestPermission() {
@@ -128,19 +109,13 @@ class SplashScreen : AppCompatActivity() {
     ) {
         if (requestCode == PERMISSION_REQUEST_CODE) {
             if (grantResults.isNotEmpty()) {
-                val locationAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED
-                val cameraAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED
-                if (locationAccepted && cameraAccepted) {
-//                    startActivity(Intent(this@SplashScreen, MainActivity::class.java))
+                val readStorageAccepted = grantResults[0] == PERMISSION_GRANTED
+                val writeStorageAccepted = grantResults[1] == PERMISSION_GRANTED
+                if (readStorageAccepted && writeStorageAccepted) {
+                    //Permission Granted
                 } else {
-
-                    //                        Snackbar.make(view, "Permission Denied, You cannot access location data and camera.", Snackbar.LENGTH_LONG).show();
-                    //                        if (shouldShowRequestPermissionRationale(Manifest.permission.READ_CALENDAR)) {
                     showMessageOKCancel("You need to allow access to both the permissions",
-                        { dialog, which -> /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                                            requestPermissions(new String[]{Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR},
-                                                                    PERMISSION_REQUEST_CODE);
-                                                        }*/
+                        { dialog, which ->
                             val intent = Intent()
                             intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                             val uri = Uri.fromParts(
@@ -160,14 +135,13 @@ class SplashScreen : AppCompatActivity() {
                         startActivity(intent)
                     }
                     return
-                    //                        }
                 }
             }
         } else if (requestCode == PERMISSION_REQUEST_CODE_ABOVE_33 || requestCode == PERMISSION_REQUEST_CODE_ABOVE_34) {
             if (grantResults.isNotEmpty()) {
                 val accepted = grantResults[0] == PackageManager.PERMISSION_GRANTED
                 if (accepted) {
-//                    startActivity(Intent(this@SplashScreen, MainActivity::class.java))
+//                    Permission Granted
                 } else {
 
                     showMessageOKCancel("You need to allow access to both the permissions",
@@ -201,12 +175,12 @@ class SplashScreen : AppCompatActivity() {
     private fun showMessageOKCancel(
         message: String,
         okListener: DialogInterface.OnClickListener,
-        cancelListner: DialogInterface.OnClickListener
+        cancelListener: DialogInterface.OnClickListener
     ) {
         AlertDialog.Builder(this@SplashScreen)
             .setMessage(message)
             .setPositiveButton("OK", okListener)
-            .setNegativeButton("Cancel", cancelListner)
+            .setNegativeButton("Cancel", cancelListener)
             .create()
             .show()
     }
