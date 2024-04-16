@@ -20,7 +20,7 @@
 
 <h2>Setup</h2>
 <ol>
-<li>Clone the repository: <code>git clone https://github.com/artithesiya/UnSplashDemo.git </code></li>
+<li>Clone the repository: <code><a>git clone https://github.com/artithesiya/UnSplashDemo.git</a> </code></li>
 <li>Open the project in Android Studio (version Android Studio Iguana | 2023.2.1 Patch 2 or newer)</li>
 <li>Build and run the app on a device or emulator</li>
 </ol>
