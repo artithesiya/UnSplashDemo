@@ -13,7 +13,7 @@
 <li>Fetches images from Unsplash API</li>
 <li>Displays images in a grid view</li>
 <li>Pagination support for loading more images</li>
-<li>Offline image handling using disk cache</li>
+<li>Disk catch for efficient retrieval</li>
 <li>Error handling for network issues</li>
 <li>Placeholder loader image</li>
 </ul>
