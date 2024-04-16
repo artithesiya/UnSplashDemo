@@ -39,7 +39,7 @@
 </ul>
 <p><strong>Parameters:</strong></p>
 <ul>
-<li><strong>per_page:</strong> 20</li>
+<li><strong>per_page:</strong> 15</li>
 <li><strong>page:</strong> 1</li>
 </ul>
 
