@@ -42,7 +42,10 @@
 <li><strong>per_page:</strong> 15</li>
 <li><strong>page:</strong> 1</li>
 </ul>
-
+<p><strong>Usage:</strong></p>
+<ul>
+<li><strong>Make sure to replace YOUR_ACCESS_KEY_HERE with your actual Unsplash API access key.</strong></li>
+</ul>
 
 </body>
 </html>
